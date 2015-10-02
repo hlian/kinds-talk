@@ -17,6 +17,7 @@ module Main where
 
 
 
+import qualified Data.IntMap
 import Data.List
 import Data.Map hiding (map)
 import Text.Printf
@@ -118,3 +119,23 @@ reifyNat n k = f Proxy
     f = g n
     g :: Integer -> Proxy Any -> r
     g = unsafeCoerce (MagicNat k :: MagicNat r)
+
+
+type L = [Int, Bool]
+type N = String ': L
+
+
+
+class GMapKey k where
+  data GMap k :: * -> *
+  empty       :: GMap k v
+  lookup      :: k -> GMap k v -> Maybe v
+  insert      :: k -> v -> GMap k v -> GMap k v
+
+data Foo a = Foo a
+
+instance GMapKey Int where
+  data GMap Int v        = GMapInt (Data.IntMap.IntMap v)
+  empty                  = GMapInt Data.IntMap.empty
+  lookup k   (GMapInt m) = Data.IntMap.lookup k m
+  insert k v (GMapInt m) = GMapInt (Data.IntMap.insert k v m)
