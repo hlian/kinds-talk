@@ -86,6 +86,14 @@ waitWhat = 3
 
 
 
+lg :: Proxy base -> Proxy (base ^ pow) -> Proxy pow
+lg _ _ = Proxy
+
+seven = natVal (Proxy :: Proxy (3 + 4))
+woah = natVal (lg (Proxy :: Proxy 2) (Proxy :: Proxy 8))
+
+
+
 newtype Modulus s a = Modulus a deriving (Show, Eq)
 newtype M s a = M a deriving (Show, Eq)
 data AnyModulus a =  forall s. AnyModulus (Modulus s a)
