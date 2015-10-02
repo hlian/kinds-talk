@@ -63,15 +63,17 @@ curl :: JSON -> String
 curl (JFloat f) = show f
 curl (JString s) = printf "\"%s\"" s
 curl (JArray jsons) = printf "[%s]" (intercalate "," (map curl jsons))
-curl (JObject pairs) = printf "{%s}" (intercalate "," [printf "\"%s\": %s" k (curl v) | (k, v) <- pairs])
+curl (JObject pairs) = printf "{%s}" (intercalate "," [printf "\"%s\": %s" k (curl v) | (k, v) <- pairs] :: String)
 
 -- this is a function that takes a type T
 -- and always returns
 
+encodeMe :: Map String Float
+encodeMe = fromList [("hello", 30), ("there", 4.0)]
+
 main :: IO ()
 main = do
-  let amap = fromList [("hello", 3.0 :: Float), ("there", 4.0)]
-  (print . encode) amap
+  (print . encode) encodeMe
 
 
 
